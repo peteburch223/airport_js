@@ -1,9 +1,10 @@
 function Airport(){
 };
 
-Airport.prototype.init = function(){
+Airport.prototype.init = function(capacity = 20){
   this._weatherReporter = WeatherReporter.createInstance();
   this.planes = [];
+  this._capacity = capacity;
 };
 
 Airport.prototype.land = function(plane){
@@ -11,11 +12,25 @@ Airport.prototype.land = function(plane){
     throw 'Cannot land plane: weather is stormy';
   };
   if (this._isFull()) {
-    console.log('should be throwing error');
     throw 'Cannot land plane: airport full';
   };
   plane.land(this);
   this._addPlane(plane);
+};
+
+Airport.prototype.take_off = function(plane){
+  if (this._isStormy()) {
+    throw 'Cannot take off plane: weather is stormy';
+  };
+  if (this._isNotAtAirport(plane)) {
+    throw 'Cannot take off plane: plane not at this airport';
+  };
+  plane.take_off();
+  return plane;
+};
+
+Airport.prototype._isNotAtAirport = function(plane){
+  return this.planes.indexOf(plane) == -1;
 };
 
 Airport.prototype._isStormy = function(){
@@ -23,7 +38,7 @@ Airport.prototype._isStormy = function(){
 };
 
 Airport.prototype._isFull = function(){
-  return this.planes.length >= 20;
+  return this.planes.length >= this._capacity;
 };
 
 Airport.prototype._addPlane = function(plane){
