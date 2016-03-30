@@ -4,7 +4,6 @@ describe("Airport", function(){
 
   beforeEach(function(){
     airport = new Airport();
-    airport.init();
     plane = {
       land: function(){},
       take_off: function(){}
@@ -68,17 +67,19 @@ describe("Airport", function(){
         expect(airport.take_off(plane)).toEqual(plane);
       });
 
-      it('raises an error if plane is not at this airport', function(){
+      beforeEach(function(){
         other_airport = new Airport;
-        other_airport.init();
+        spyOn(other_airport,'_isStormy').and.returnValue(false);
+      });
+      it('raises an error if plane is not at this airport', function(){
         other_airport.land(plane);
         expect(function(){airport.take_off(plane)}).toThrow('Cannot take off plane: plane not at this airport');
       });
     });
     describe("when stormy", function(){
       beforeEach(function(){
-          airport.land(plane);
-          spyOn(airport,'_isStormy').and.returnValue(true);
+        airport.planes.push(plane);
+        spyOn(airport,'_isStormy').and.returnValue(true);
       });
       it('raises an error', function(){
       expect(function(){airport.take_off(plane)}).toThrow('Cannot take off plane: weather is stormy');

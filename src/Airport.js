@@ -1,10 +1,7 @@
 function Airport(){
-};
-
-Airport.prototype.init = function(capacity = 20){
   this._weatherReporter = WeatherReporter.createInstance();
   this.planes = [];
-  this._capacity = capacity;
+  this._capacity = 20;
 };
 
 Airport.prototype.land = function(plane){

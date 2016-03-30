@@ -6,6 +6,7 @@ Plane.prototype.takeoff = function(){
   if (this.flying) {
     throw 'Plane is already flying';
   };
+  this.flying = true;
 };
 Plane.prototype.land = function(airport){
   if (!this.flying) {
