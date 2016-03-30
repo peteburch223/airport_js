@@ -26,6 +26,7 @@ Airport.prototype.take_off = function(plane){
     throw 'Cannot take off plane: plane not at this airport';
   };
   plane.take_off();
+  this._removePlane();
   return plane;
 };
 
@@ -43,4 +44,8 @@ Airport.prototype._isFull = function(){
 
 Airport.prototype._addPlane = function(plane){
   this.planes.push(plane);
+};
+
+Airport.prototype._removePlane = function(plane){
+  this.planes.pop(plane);
 };

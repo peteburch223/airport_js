@@ -18,7 +18,7 @@ describe("Airport", function(){
 
     describe("when not stormy", function(){
       beforeEach(function(){
-        spyOn(Math,'random').and.returnValue(0);
+        spyOn(airport,'_isStormy').and.returnValue(false);
       });
       it('instructs a plane to land', function(){
         expect(plane.land.calls.any()).toEqual(false);
@@ -29,7 +29,7 @@ describe("Airport", function(){
 
     describe("when full", function(){
       beforeEach(function(){
-        spyOn(Math,'random').and.returnValue(0);
+        spyOn(airport,'_isStormy').and.returnValue(false);
         var times = 20;
         for(var i=1; i <= times; i++){
         airport.land(plane);
@@ -42,7 +42,7 @@ describe("Airport", function(){
 
     describe("when stormy", function(){
       beforeEach(function(){
-        spyOn(Math,'random').and.returnValue(0.9);
+        spyOn(airport,'_isStormy').and.returnValue(true);
       });
       it('raises an error', function(){
         expect(function(){airport.land(plane)}).toThrow('Cannot land plane: weather is stormy');
@@ -53,7 +53,7 @@ describe("Airport", function(){
   describe("#take_off", function(){
     describe("when not stormy", function(){
       beforeEach(function(){
-        spyOn(Math,'random').and.returnValue(0);
+        spyOn(airport,'_isStormy').and.returnValue(false);
         spyOn(plane,'take_off');
       });
       it('instructs a plane to take_off', function(){
@@ -77,13 +77,28 @@ describe("Airport", function(){
     });
     describe("when stormy", function(){
       beforeEach(function(){
-        airport.land(plane);
-        spyOn(Math,'random').and.returnValue(0.9);
+          airport.land(plane);
+          spyOn(airport,'_isStormy').and.returnValue(true);
       });
       it('raises an error', function(){
       expect(function(){airport.take_off(plane)}).toThrow('Cannot take off plane: weather is stormy');
       });
     });
-
   });
+  describe("#planes", function(){
+    beforeEach(function(){
+      spyOn(airport,'_isStormy').and.returnValue(false);
+    });
+    it('returns planes at the airport', function(){
+      airport.land(plane);
+      expect(airport.planes.indexOf(plane) == -1).toBe(false);
+    });
+    it('does not return planes that have taken off', function(){
+      airport.land(plane);
+      airport.take_off(plane);
+      console.log(airport.planes);
+      expect(airport.planes.indexOf(plane) == -1).toBe(true);
+    });
+  });
+
 });
